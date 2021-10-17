@@ -64,6 +64,20 @@ void setWindowMaxSize(Size size) async {
 void setWindowTitle(String title) async {
   WindowSizeChannel.instance.setWindowTitle(title);
 }
+/// show Window Title Bar
+void showWindowTitleBar() async{
+  WindowSizeChannel.instance.showWindowTitleBar();
+}
+
+/// hide Window Title Bar
+void hideWindowTitleBar() async {
+  WindowSizeChannel.instance.hideWindowTitleBar();
+}
+
+///
+Future<bool> isSplashLoaded() async{
+  return WindowSizeChannel.instance.isSplashLoaded();
+}
 
 /// Shows or hides the window.
 void setWindowVisibility({required bool visible}) async {

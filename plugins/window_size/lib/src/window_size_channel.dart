@@ -59,6 +59,15 @@ const String _setWindowMaximumSizeMethod = 'setWindowMaximumSize';
 /// The method name to set the window title of a window.
 const String _setWindowTitleMethod = 'setWindowTitle';
 
+/// The method name to hide title bar
+const String _hideWindowTitleBar = 'hideWindowTitleBar';
+
+/// The method name to show title bar
+const String _showWindowTitleBar = 'showWindowTitleBar';
+
+/// The method nam to check splash loaded
+const String _isSplashLoaded = 'isSplashLoaded';
+
 /// The method name to set the window title's represented URL.
 ///
 /// Only implemented for macOS. If the URL is a file URL, the
@@ -189,6 +198,22 @@ class WindowSizeChannel {
   /// Sets the title of the window containing this Flutter instance.
   void setWindowTitle(String title) async {
     await _platformChannel.invokeMapMethod(_setWindowTitleMethod, title);
+  }
+
+  /// show Window Title Bar
+  void showWindowTitleBar() async {
+    await _platformChannel.invokeMapMethod(_showWindowTitleBar);
+  }
+
+  /// hide Window Title Bar
+  void hideWindowTitleBar() async {
+    await _platformChannel.invokeMapMethod(_hideWindowTitleBar);
+  }
+
+  ///
+  Future<bool> isSplashLoaded() async {
+    final response = await _platformChannel.invokeMethod(_isSplashLoaded);
+    return response.cast<bool>()[0] ?? false;
   }
 
   /// Sets the title's represented URL of the window containing this Flutter instance.

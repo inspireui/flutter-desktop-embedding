@@ -26,6 +26,9 @@ NSString *const kSetWindowFrameMethod = @"setWindowFrame";
 NSString *const kSetWindowMinimumSizeMethod = @"setWindowMinimumSize";
 NSString *const kSetWindowMaximumSizeMethod = @"setWindowMaximumSize";
 NSString *const kSetWindowTitleMethod = @"setWindowTitle";
+NSString *const kShowWindowTitleBarMethod = @"showWindowTitleBar";
+NSString *const kHideWindowTitleBarMethod = @"hideWindowTitleBar";
+NSString *const kIsSplashLoaded = @"isSplashLoaded";
 NSString *const kSetWindowTitleRepresentedUrlMethod = @"setWindowTitleRepresentedUrl";
 NSString *const kSetWindowVisibilityMethod = @"setWindowVisibility";
 NSString *const kGetWindowMinimumSizeMethod = @"getWindowMinimumSize";
@@ -169,6 +172,34 @@ double ChannelRepresentationForMaxDimension(double size) { return size == FLT_MA
   } else if ([call.method isEqualToString:kSetWindowTitleMethod]) {
     NSString *title = call.arguments;
     self.flutterView.window.title = title;
+    methodResult = nil;
+  } else if ([call.method isEqualToString:kIsSplashLoaded]) {
+    if ((self.flutterView.window.styleMask & NSWindowStyleMaskTitled) != 0) {
+      methodResult = @[@true];
+    } else {
+      methodResult = @[@false];
+    }
+  } else if ([call.method isEqualToString:kShowWindowTitleBarMethod]) {
+    if ((self.flutterView.window.styleMask & NSWindowStyleMaskTitled) != 0) {
+      return;
+    }
+    self.flutterView.window.styleMask |= NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable;
+    /* Making the window transparent */
+    self.flutterView.window.opaque = false;
+    self.flutterView.window.backgroundColor = [NSColor clearColor];
+    /* Adding a NSVisualEffectView to act as a translucent background */
+    NSView *contentView = self.flutterView.window.contentViewController.view;
+    NSView *superView = contentView.superview;
+    NSVisualEffectView *blurView = [[NSVisualEffectView alloc] initWithFrame:self.flutterView.window.frame];
+    blurView.blendingMode = NSVisualEffectBlendingModeBehindWindow;
+    blurView.frame = superView.bounds;
+    blurView.autoresizingMask = NSViewWidthSizable;
+    /* Replace the contentView and the background view */
+    [superView replaceSubview: contentView with: blurView];
+    [blurView addSubview: contentView];
+    methodResult = nil;
+  } else if ([call.method isEqualToString:kHideWindowTitleBarMethod]) {
+    self.flutterView.window.styleMask = NSWindowStyleMaskBorderless;
     methodResult = nil;
   } else if ([call.method isEqualToString:kSetWindowTitleRepresentedUrlMethod]) {
     NSURL *representedURL = [NSURL URLWithString:call.arguments];
