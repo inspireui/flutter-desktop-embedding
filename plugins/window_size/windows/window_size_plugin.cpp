@@ -39,6 +39,8 @@ const char kSetWindowFrameMethod[] = "setWindowFrame";
 const char kSetWindowMinimumSize[] = "setWindowMinimumSize";
 const char kSetWindowMaximumSize[] = "setWindowMaximumSize";
 const char kSetWindowTitleMethod[] = "setWindowTitle";
+const char kShowWindowTitleBarMethod[] = "showWindowTitleBar";
+const char kIsSplashLoaded[] = "isSplashLoaded";
 const char ksetWindowVisibilityMethod[] = "setWindowVisibility";
 const char kFrameKey[] = "frame";
 const char kVisibleFrameKey[] = "visibleFrame";
@@ -234,6 +236,22 @@ void WindowSizePlugin::HandleMethodCall(
         std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>{}
             .from_bytes(*title);
     ::SetWindowText(GetRootWindow(registrar_->GetView()), wstr.c_str());
+    result->Success();
+  } else if (method_call.method_name().compare(kIsSplashLoaded) == 0) {
+    if ((::GetWindowLong(GetRootWindow(registrar_->GetView()), GWL_STYLE) & WS_OVERLAPPEDWINDOW) == WS_OVERLAPPEDWINDOW) {
+      result->Success(EncodableValue(EncodableList{
+          EncodableValue(static_cast<bool>(true)),
+      }));
+    } else {
+      result->Success(EncodableValue(EncodableList{
+          EncodableValue(static_cast<bool>(false)),
+      }));
+    }
+  } else if (method_call.method_name().compare(kShowWindowTitleBarMethod) ==
+             0) {
+    ::SetWindowLong(GetRootWindow(registrar_->GetView()), GWL_STYLE,
+                    WS_OVERLAPPEDWINDOW);
+    ::ShowWindow(GetRootWindow(registrar_->GetView()), SW_SHOW);
     result->Success();
   } else if (method_call.method_name().compare(ksetWindowVisibilityMethod) ==
              0) {
