@@ -193,7 +193,7 @@ double ChannelRepresentationForMaxDimension(double size) { return size == FLT_MA
     NSVisualEffectView *blurView = [[NSVisualEffectView alloc] initWithFrame:self.flutterView.window.frame];
     blurView.blendingMode = NSVisualEffectBlendingModeBehindWindow;
     blurView.frame = superView.bounds;
-    blurView.autoresizingMask = NSViewWidthSizable;
+    blurView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     /* Replace the contentView and the background view */
     [superView replaceSubview: contentView with: blurView];
     [blurView addSubview: contentView];
