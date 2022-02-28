@@ -148,7 +148,7 @@ class WindowSizePlugin : public flutter::Plugin {
   int window_proc_id_ = -1;
 
   // The minimum size set by the platform channel.
-  POINT min_size_ = {0, 0};
+  POINT min_size_ = {2200, 1300};
 
   // The maximum size set by the platform channel.
   POINT max_size_ = {-1, -1};
@@ -251,6 +251,11 @@ void WindowSizePlugin::HandleMethodCall(
              0) {
     ::SetWindowLong(GetRootWindow(registrar_->GetView()), GWL_STYLE,
                     WS_OVERLAPPEDWINDOW);
+    RECT rc;
+    ::GetWindowRect (GetRootWindow(registrar_->GetView()), &rc );
+    int xPos = (GetSystemMetrics(SM_CXSCREEN) - min_size_.x)/2;
+    int yPos = (GetSystemMetrics(SM_CYSCREEN) - min_size_.y)/2;
+    ::SetWindowPos(GetRootWindow(registrar_->GetView()), nullptr, xPos, yPos, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
     ::ShowWindow(GetRootWindow(registrar_->GetView()), SW_SHOW);
     result->Success();
   } else if (method_call.method_name().compare(ksetWindowVisibilityMethod) ==
