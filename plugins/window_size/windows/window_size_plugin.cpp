@@ -148,7 +148,7 @@ class WindowSizePlugin : public flutter::Plugin {
   int window_proc_id_ = -1;
 
   // The minimum size set by the platform channel.
-  POINT min_size_ = {1100, 750};
+  POINT min_size_ = {0, 0};
 
   // The maximum size set by the platform channel.
   POINT max_size_ = {-1, -1};
