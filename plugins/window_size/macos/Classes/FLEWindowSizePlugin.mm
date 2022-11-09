@@ -188,15 +188,15 @@ double ChannelRepresentationForMaxDimension(double size) { return size == FLT_MA
     self.flutterView.window.opaque = false;
     self.flutterView.window.backgroundColor = [NSColor clearColor];
     /* Adding a NSVisualEffectView to act as a translucent background */
-    NSView *contentView = self.flutterView.window.contentViewController.view;
-    NSView *superView = contentView.superview;
-    NSVisualEffectView *blurView = [[NSVisualEffectView alloc] initWithFrame:self.flutterView.window.frame];
-    blurView.blendingMode = NSVisualEffectBlendingModeBehindWindow;
-    blurView.frame = superView.bounds;
-    blurView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-    /* Replace the contentView and the background view */
-    [superView replaceSubview: contentView with: blurView];
-    [blurView addSubview: contentView];
+    // NSView *contentView = self.flutterView.window.contentViewController.view;
+    // NSView *superView = contentView.superview;
+    // NSVisualEffectView *blurView = [[NSVisualEffectView alloc] initWithFrame:self.flutterView.window.frame];
+    // blurView.blendingMode = NSVisualEffectBlendingModeBehindWindow;
+    // blurView.frame = superView.bounds;
+    // blurView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+    // /* Replace the contentView and the background view */
+    // [superView replaceSubview: contentView with: blurView];
+    // [blurView addSubview: contentView];
     methodResult = nil;
   } else if ([call.method isEqualToString:kHideWindowTitleBarMethod]) {
     self.flutterView.window.styleMask = NSWindowStyleMaskBorderless;
